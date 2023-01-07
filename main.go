@@ -27,6 +27,9 @@ func main() {
 
 	fmt.Println("Order List service started at ", config.AppPort, "  ...")
 
+	app.Post("/user/register", API.HandleUserCreate)
+	app.Post("/user/login", API.HandleUserLogin)
+
 	app.Get("/status", func(c *fiber.Ctx) {
 		c.Status(fiber.StatusOK)
 	})
