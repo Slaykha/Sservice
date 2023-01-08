@@ -52,3 +52,37 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError)
 	}
 }
+
+func (a *Api) HandlePollCreate(c *fiber.Ctx) {
+	UserID := c.Params("userId")
+
+	var PollDTO models.PollDTO
+
+	err := c.BodyParser(&PollDTO)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+	}
+
+	user, err := a.service.CreatePoll(PollDTO, UserID)
+
+	switch err {
+	case nil:
+		c.JSON(user)
+		c.Status(fiber.StatusCreated)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+}
+
+func (a *Api) HandlePollsGet(c *fiber.Ctx) {
+	polls, err := a.service.GetPolls()
+
+	switch err {
+	case nil:
+		c.JSON(polls)
+		c.Status(fiber.StatusOK)
+	default:
+		c.Status(fiber.StatusInternalServerError)
+	}
+
+}

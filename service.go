@@ -59,6 +59,34 @@ func (s *Service) LoginUser(userDTO models.UserLoginDTO) (*models.User, error) {
 	return user, nil
 }
 
+func (s *Service) CreatePoll(PollDTO models.PollDTO, UserID string) (*models.Poll, error) {
+
+	Poll := models.Poll{
+		ID:           generateID(),
+		UserId:       UserID,
+		PollQuestion: PollDTO.PollQuestion,
+		PollOptions:  PollDTO.PollOptions,
+		CreatedAt:    time.Now().UTC(),
+	}
+
+	err := s.repository.CreatePoll(Poll)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Poll, nil
+}
+
+func (s *Service) GetPolls() ([]models.Poll, error) {
+	spendings, err := s.repository.GetPolls()
+	if err != nil {
+		fmt.Println("1")
+		return nil, err
+	}
+
+	return spendings, err
+}
+
 func generateID() (id string) {
 	id = uuid.New().String()
 

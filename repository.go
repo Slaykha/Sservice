@@ -62,3 +62,49 @@ func (r *Repository) FindUser(email string) (*models.User, error) {
 
 	return &user, err
 }
+
+func (r *Repository) CreatePoll(poll models.Poll) error {
+	collection := r.client.Database("pollapp").Collection("polls")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, poll)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) GetPolls() ([]models.Poll, error) {
+	collection := r.client.Database("pollapp").Collection("polls")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var polls []models.Poll
+
+	result, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	for result.Next(ctx) {
+		poll := models.Poll{}
+		err := result.Decode(&poll)
+		if err != nil {
+			fmt.Println("3")
+			return nil, err
+		}
+
+		polls = append(polls, poll)
+	}
+
+	if err != nil {
+		fmt.Println("4")
+		return nil, err
+	}
+
+	return polls, nil
+}

@@ -10,6 +10,11 @@ type Poll struct {
 	CreatedAt    time.Time `json:"createdAt" bson:"createdAt"`
 }
 
+type PollDTO struct {
+	PollQuestion string    `json:"pollQuestion" bson:"pollQuestion"`
+	PollOptions  []Options `json:"options" bson:"options"`
+}
+
 type Options struct {
 	OptionText  string `json:"optionText" bson:"optionText"`
 	OptionVotes int    `json:"optionVotes" bson:"optionVotes"`
