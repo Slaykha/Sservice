@@ -30,6 +30,12 @@ func main() {
 	app.Post("/user/register", API.HandleUserCreate)
 	app.Post("/user/login", API.HandleUserLogin)
 
+	app.Post("/poll/create/:userId")
+	app.Get("/poll/list")
+	app.Get("/poll/list/:UserId")
+	app.Put("/poll/:pollId/vote/:userID")
+	app.Delete("/poll/:pollId/delete")
+
 	app.Get("/status", func(c *fiber.Ctx) {
 		c.Status(fiber.StatusOK)
 	})
