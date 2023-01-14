@@ -25,7 +25,7 @@ func main() {
 
 	app := SetupApp(API)
 
-	fmt.Println("Order List service started at ", config.AppPort, "  ...")
+	fmt.Println("Poll App service started at ", config.AppPort, "  ...")
 
 	app.Post("/user/register", API.HandleUserCreate)
 	app.Post("/user/login", API.HandleUserLogin)
@@ -57,7 +57,7 @@ func SetupApp(API *Api) *fiber.App {
 func setConfig() {
 	config = Config{
 		AppPort:         12345,
-		Host:            "http://localhost:12345",
+		Host:            "192.168.1.101:12345",
 		DBReplicaSetUrl: "mongodb+srv://admin:HkJpLyv1MclTvMIc@spendingtraacker.ybzvy6n.mongodb.net/?retryWrites=true&w=majority",
 	}
 }

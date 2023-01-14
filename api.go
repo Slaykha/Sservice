@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Slaykha/Poll-App-Service/helpers"
 	"github.com/Slaykha/Poll-App-Service/models"
 	"github.com/gofiber/fiber"
 )
@@ -36,6 +37,7 @@ func (a *Api) HandleUserCreate(c *fiber.Ctx) {
 
 func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 	var UserDTO models.UserLoginDTO
+	var token string
 
 	err := c.BodyParser(&UserDTO)
 	if err != nil {
@@ -43,10 +45,13 @@ func (a *Api) HandleUserLogin(c *fiber.Ctx) {
 	}
 
 	user, err := a.service.LoginUser(UserDTO)
+	if err == nil {
+		token, _ = helpers.CreateToken(user.ID)
+	}
 
 	switch err {
 	case nil:
-		c.JSON(user)
+		c.JSON(token)
 		c.Status(fiber.StatusCreated)
 	default:
 		c.Status(fiber.StatusInternalServerError)
